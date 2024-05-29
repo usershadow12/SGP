@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('medicos', function (Blueprint $table) {
             $table->id();
-            $table->string('bi', 9)->unique();
+            $table->string('bi', 14)->unique();
             $table->string('nome', 20);
             $table->string('sobrenome', 30);
             $table->enum('sexo', ['M', 'F']);
