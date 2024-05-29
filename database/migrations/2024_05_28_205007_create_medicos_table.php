@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pacientes', function (Blueprint $table) {
+        Schema::create('medicos', function (Blueprint $table) {
             $table->id();
             $table->string('bi', 9)->unique();
             $table->string('nome', 20);
@@ -19,10 +19,13 @@ return new class extends Migration
             $table->enum('sexo', ['M', 'F']);
             $table->float('peso');
             $table->integer('idade');
+            $table->string('ordem')->unique();
             $table->string('contacto1');
             $table->string('contacto2')->nullable();
             $table->string('morada');
+            $table->unsignedbigInteger('fk_especialidade');
             $table->timestamps();
+            $table->foreign('fk_especialidade')->references('id')->on('especialidades')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -31,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pacientes');
+        Schema::dropIfExists('medicos');
     }
 };

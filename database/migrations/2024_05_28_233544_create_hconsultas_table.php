@@ -11,9 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('especialidades', function (Blueprint $table) {
+        Schema::create('hconsultas', function (Blueprint $table) {
             $table->id();
+            $table->string('exame');
+            $table->string('diagnostico');
+            $table->string('observacoes')->nullable();
+            $table->unsignedbigInteger('fk_consulta');
             $table->timestamps();
+            $table->foreign('fk_consulta')->references('id')->on('consultas')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -22,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('especialidades');
+        Schema::dropIfExists('hconsultas');
     }
 };
