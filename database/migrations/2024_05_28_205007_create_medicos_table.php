@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('nome', 20);
             $table->string('sobrenome', 30);
             $table->enum('sexo', ['M', 'F']);
-            $table->float('peso');
             $table->integer('idade');
             $table->string('ordem')->unique();
             $table->string('contacto1');
