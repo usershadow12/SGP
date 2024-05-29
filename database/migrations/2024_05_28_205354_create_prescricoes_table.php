@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->dateTime('data')->default(DB::raw('CURRENT_TIMESTAMP()'));
             $table->text('medicamento');
-            $table->integer('duração');
+            $table->integer('duracao');
             $table->text('descricao');
             $table->text('indicacao_especial');
             $table->unsignedbigInteger('fk_consulta');
