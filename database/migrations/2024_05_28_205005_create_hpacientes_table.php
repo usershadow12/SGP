@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('hpacientes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedbigInteger('fk_paciente');
             $table->string('antecendente')->nullable();
             $table->string('historico_familiar')->nullable();
             $table->string('alergia')->nullable();
+            $table->foreignId('paciente_id')
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->timestamps();
-            $table->foreign('fk_paciente')->references('id')->on('pacientes')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

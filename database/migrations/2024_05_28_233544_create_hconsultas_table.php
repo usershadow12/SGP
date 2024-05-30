@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('observacoes')->nullable();
             $table->unsignedbigInteger('fk_consulta');
             $table->timestamps();
+            $table->foreignId()
             $table->foreign('fk_consulta')->references('id')->on('consultas')->onDelete('cascade')->onUpdate('cascade');
         });
     }

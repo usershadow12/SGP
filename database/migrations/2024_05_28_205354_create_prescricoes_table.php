@@ -19,9 +19,11 @@ return new class extends Migration
             $table->integer('duracao');
             $table->text('descricao');
             $table->text('indicacao_especial');
-            $table->unsignedbigInteger('fk_consulta');
+            $table->foreignId('consulta_id')
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->timestamps();
-            $table->foreign('fk_consulta')->references('id')->on('consultas')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

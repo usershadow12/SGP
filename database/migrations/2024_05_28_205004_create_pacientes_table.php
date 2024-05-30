@@ -22,6 +22,10 @@ return new class extends Migration
             $table->string('contacto1');
             $table->string('contacto2')->nullable();
             $table->string('morada');
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->timestamps();
         });
     }
