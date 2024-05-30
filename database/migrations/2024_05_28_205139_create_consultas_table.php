@@ -15,13 +15,12 @@ return new class extends Migration
         Schema::create('consultas', function (Blueprint $table) {
             $table->id();
             $table->string('tipo');
-            $table->float('custo');
             $table->datetime('data_marcacao')
                 ->default(DB::raw('CURRENT_TIMESTAMP()'));
             $table->datetime('data_consulta')
                 ->default(DB::raw('CURRENT_TIMESTAMP()'));
             $table->timestamps();
-            $table->enum('status', ['Marcada', 'Cancelada', 'Feita']);
+            $table->enum('status', ['Marcada', 'Cancelada', 'Aberta', 'Feita']);
             $table->foreignId('tipoconsulta_id')
             ->constrained()
             ->cascadeOnDelete()
