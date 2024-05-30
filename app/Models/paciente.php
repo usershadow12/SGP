@@ -11,5 +11,5 @@ class paciente extends Model
     protected $table = 'pacientes';
     protected $fillable = [
         'bi', 'nome', 'sobrenome', 'sexo', 'peso',
-        'idade', 'contacto1', 'contacto2', 'morada'];
+        'idade', 'contacto1', 'contacto2', 'morada', 'user_id'];
 }

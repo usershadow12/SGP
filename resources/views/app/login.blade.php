@@ -15,8 +15,8 @@
     <form method="POST" action="{{ route('auth') }}">
         @csrf
         <div>
-            <label for="">Username</label>
-            <input type="text" name="name" required>
+            <label for="">E-mail</label>
+            <input type="email" name="email" required>
         </div>
         <div>
             <label for="">Password</label>

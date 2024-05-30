@@ -1,7 +1,7 @@
 <?php
-
 namespace App\Http\Controllers;
 
+session_start();
 use App\Models\Novouser;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -24,10 +24,14 @@ class UserController extends Controller
             'password.required' => 'Password é obrigatório'
         ]);*/
 
-        if(Auth::attempt(['name' => $request->name, 'password' => $request->password])){
-            dd('Login feito');
+        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
+
+            $dados = User::where('email', $request['email'])->First();
+            $_SESSION['user'] = $dados;
+            if($dados['paciente'] === 1)  return redirect()->route('paciente.index');
+            else return redirect()->route('medico.index');
         }else{
-            return redirect()->back()->with('danger', 'Username ou Senha Inválida');
+            return redirect()->back()->with('danger', 'email ou Senha Inválida');
             //dd('login falhou');
         }
     }
@@ -35,6 +39,7 @@ class UserController extends Controller
     public function create(){
         return view('app.cadastro');
     }
+
     public function store(Request $request){
         if($request['tipo'] === 'paciente'){
             $request['paciente'] = 1;
