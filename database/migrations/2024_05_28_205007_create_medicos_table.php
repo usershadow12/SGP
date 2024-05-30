@@ -22,9 +22,11 @@ return new class extends Migration
             $table->string('contacto1');
             $table->string('contacto2')->nullable();
             $table->string('morada');
-            $table->unsignedbigInteger('fk_especialidade');
             $table->timestamps();
-            $table->foreign('fk_especialidade')->references('id')->on('especialidades')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('especialidade_id')
+            ->constrained()
+            ->cascadeOnDelete()
+            ->cascadeOnUpdate();
         });
     }
 

@@ -16,13 +16,24 @@ return new class extends Migration
             $table->id();
             $table->string('tipo');
             $table->float('custo');
-            $table->datetime('data_marcacao')->default(DB::raw('CURRENT_TIMESTAMP()'));
-            $table->datetime('data_consulta')->default(DB::raw('CURRENT_TIMESTAMP()'));
-            $table->unsignedbigInteger('fk_paciente');
-            $table->unsignedbigInteger('fk_medico');
+            $table->datetime('data_marcacao')
+                ->default(DB::raw('CURRENT_TIMESTAMP()'));
+            $table->datetime('data_consulta')
+                ->default(DB::raw('CURRENT_TIMESTAMP()'));
             $table->timestamps();
-            $table->foreign('fk_paciente')->references('id')->on('pacientes')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('fk_medico')->references('id')->on('medicos')->onDelete('cascade')->onUpdate('cascade');
+            $table->enum('status', ['Marcada', 'Cancelada', 'Feita']);
+            $table->foreignId('tipoconsulta_id')
+            ->constrained()
+            ->cascadeOnDelete()
+            ->cascadeOnUpdate();
+            $table->foreignId('paciente_id')
+            ->constrained()
+            ->cascadeOnDelete()
+            ->cascadeOnUpdate();
+            $table->foreignId('medico_id')
+            ->constrained()
+            ->cascadeOnDelete()
+            ->cascadeOnUpdate();
         });
     }
 

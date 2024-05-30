@@ -15,12 +15,15 @@ return new class extends Migration
         Schema::create('facturas', function (Blueprint $table) {
             $table->id();
             $table->dateTime('data')->default(DB::raw('CURRENT_TIMESTAMP()'));
-            $table->enum('tipo_pagamento', ['Dinheiro', 'Transferencia', 'Cartao', 'Parcelado']);
+            $table->enum('tipo_pagamento', ['Dinheiro', 'Transferencia', 'Cartao']);
             $table->float('total');
             $table->float('troco')->default('0.0');
-            $table->unsignedbigInteger('fk_consulta');
+            $table->enum('status', ['Aberta', 'Paga'])->default('Aberta');
             $table->timestamps();
-            $table->foreign('fk_consulta')->references('id')->on('consultas')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('consulta_id')
+            ->constrained()
+            ->cascadeOnDelete()
+            ->cascadeOnUpdate();
         });
     }
 

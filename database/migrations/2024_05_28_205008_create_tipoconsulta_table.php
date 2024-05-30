@@ -11,16 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('hconsultas', function (Blueprint $table) {
+        Schema::create('tipoconsultas', function (Blueprint $table) {
             $table->id();
-            $table->string('exame');
-            $table->string('diagnostico');
-            $table->string('observacoes')->nullable();
+            $table->string('nome')->unique();
+            $table->float('valor');
             $table->timestamps();
-            $table->foreignId('consulta_id')
-            ->contrained()
-            ->cascadeOnDelete()
-            ->cascadeOnUpdate();
         });
     }
 
@@ -29,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('hconsultas');
+        Schema::dropIfExists('tipoconsulta');
     }
 };
