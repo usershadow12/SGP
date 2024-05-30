@@ -19,8 +19,8 @@ return new class extends Migration
             $table->enum('sexo', ['M', 'F']);
             $table->integer('idade');
             $table->string('ordem')->unique();
-            $table->string('contacto1');
-            $table->string('contacto2')->nullable();
+            $table->string('contacto1')->unique();
+            $table->string('contacto2')->nullable()->unique();
             $table->string('morada');
             $table->timestamps();
             $table->foreignId('especialidade_id')

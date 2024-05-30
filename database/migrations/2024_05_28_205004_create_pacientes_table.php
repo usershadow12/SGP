@@ -19,8 +19,8 @@ return new class extends Migration
             $table->enum('sexo', ['M', 'F']);
             $table->float('peso');
             $table->integer('idade');
-            $table->string('contacto1');
-            $table->string('contacto2')->nullable();
+            $table->string('contacto1')->unique();
+            $table->string('contacto2')->nullable()->unique();
             $table->string('morada');
             $table->foreignId('user_id')
                 ->constrained()
