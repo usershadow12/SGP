@@ -10,6 +10,6 @@ class hconsulta extends Model
     use HasFactory;
     protected $table = 'hconsultas';
     protected $fillable = [
-        'exame', 'diagnostico', 'obsevacoes', 'fk_consulta',
+        'exame', 'diagnostico', 'obsevacoes', 'consulta_id',
     ];
 }

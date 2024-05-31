@@ -11,6 +11,6 @@ class hpaciente extends Model
 
     protected $table = 'hpacientes';
     protected $fillable = [
-        'antecedente', 'historico_familiar', 'alergia', 'fk_paciente',
+        'antecedente', 'historico_familiar', 'alergia', 'paciente_id',
     ];
 }

@@ -6,27 +6,30 @@
     <title>Pacientes</title>
 </head>
 <body>
-    <a href="{{ route('paciente.create') }}">Cadastrar Paciente</a>
+    <a href="{{ route('consulta.create') }}">Marcar Consulta</a>
+    <a href="{{ route('consulta.show', 1) }}">Consulta Aberta</a>
+    <a href="{{ route('consulta.show', 1)}}">Consulta Cancelada</a>
+    <a href="{{ route('consulta.show', 1) }}">Consulta Fechada</a>
     <table>
         <thead>
-            <th>
-                <td>#</td>
-                <td>Nome</td>
-                <td>Sobrenome</td>
-                <td>Morada</td>
-                <td>Opções</td>
-            </th>
+            <tr>
+                <th>#</th>
+                <th>DATA CONSULTA</th>
+                <th>TIPO</th>
+                <th>DETALHES</th>
+                <th>Opções</th>
+            </tr>
         </thead>
         <tbody>
-            @forelse ($pacientes as $key => $paciente)
+            @forelse ($consultas as $key => $consulta)
             <tr>
                 <td>{{ ++$key }}</td>
-                <td>{{ $paciente->nome }}</td>
-                <td>{{ $paciente->sobrenome }}</td>
-                <td>{{ $paciente->morada }}</td>
-                <td><a href="{{ route('paciente.edit', $paciente->id) }}">Editar</a></td>
+                <td>{{ $consulta->data_consulta }}</td>
+                <td>{{ $consulta->tipo }}</td>
+                <td><a href="{{ route('consulta.show', $consulta->id) }}">ver mais</a></td>
+                <td><a href="{{ route('consulta.edit', $consulta->id) }}">Editar</a></td>
                 <td>
-                    <form  method="POST" action="{{ route('paciente.destroy', $paciente->id) }}">
+                    <form  method="POST" action="{{ route('consulta.destroy', $consulta->id) }}">
                     @csrf
                     @method('DELETE')
                     <input type="submit" value="Excluir Registro">
@@ -35,7 +38,7 @@
             </tr>
             @empty
             <tr>
-                <td>Não foram cadastrados pacientes ainda.</td>
+                <td>Não marcou nehuma consulta ainda.</td>
             </tr>
             @endforelse
         </tbody>

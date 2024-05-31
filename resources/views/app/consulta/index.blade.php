@@ -6,15 +6,19 @@
     <title>Pacientes</title>
 </head>
 <body>
+    <a href="{{ route('consulta.create') }}">Marcar Consulta</a>
+    <a href="{{ route('consulta.show', $consulta) }}">Consulta Aberta</a>
+    <a href="{{ route('consultashow', $consulta) }}">Consulta Cancelada</a>
+    <a href="{{ route('consultashow', $consulta) }}">Consulta Fechada</a>
     <table>
         <thead>
-            <tr>
-                <th>#</th>
-                <th>DATA CONSULTA</th>
-                <th>TIPO</th>
-                <th>Paciente</th>
-                <th>Opções</th>
-            </tr>
+            <th>
+                <td>#</td>
+                <td>DATA CONSULTA</td>
+                <td>TIPO</td>
+                <td>MEDICO</td>
+                <td>Opções</td>
+            </th>
         </thead>
         <tbody>
             @forelse ($consultas as $key => $consulta)
@@ -23,9 +27,9 @@
                 <td>{{ $consulta->data_consulta }}</td>
                 <td>{{ $consulta->tipo }}</td>
                 <td>{{ $consulta->medico }}</td>
-                <td><a href="{{ route('consulta.show', $consulta->paciente_id) }}">Editar</a></td>
+                <td><a href="{{ route('consulta.edit', $paciente->id) }}">Editar</a></td>
                 <td>
-                    <form  method="POST" action="{{ route('consulta.destroy', $consulta->id) }}">
+                    <form  method="POST" action="{{ route('consulta.destroy', $paciente->id) }}">
                     @csrf
                     @method('DELETE')
                     <input type="submit" value="Excluir Registro">
@@ -33,9 +37,9 @@
                 </td>
             </tr>
             @empty
-            <td>
-                Nenhuma consulta marcada com você ainda.
-            </td>
+            <tr>
+                <td>Não foram cadastrados pacientes ainda.</td>
+            </tr>
             @endforelse
         </tbody>
     </table>

@@ -18,8 +18,7 @@
         </select>
         <input type="number" name="peso" placeholder="Peso do Paciente" required>
         <input type="number" name="idade" placeholder="Idade do Paciente" required>
-        <input type="text" name="contacto1" placeholder="Contacto principal do paciente" required>
-        <input type="text" name="contacto2" placeholder="Contacto secundário do paciente" required>
+        <input type="text" name="contacto1" placeholder="Contacto do paciente" required>
         <input type="text" name="morada" placeholder="Morada do paciente" required>
 
         <input type="submit" value="Cadastrar Paciente">

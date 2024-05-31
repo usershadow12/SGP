@@ -10,6 +10,6 @@ class factura extends Model
     use HasFactory;
     protected $table = 'facturas';
     protected $fillable = [
-        'data', 'tipo_pagamento', 'total', 'troco', 'fk_consulta',
+        'data', 'tipo_pagamento', 'total', 'troco', 'consulta_id',
     ];
 }

@@ -23,6 +23,10 @@ return new class extends Migration
             $table->string('contacto2')->nullable()->unique();
             $table->string('morada');
             $table->timestamps();
+            $table->foreignId('user_id')
+            ->constrained()
+            ->cascadeOnDelete()
+            ->cascadeOnUpdate();
             $table->foreignId('especialidade_id')
             ->constrained()
             ->cascadeOnDelete()

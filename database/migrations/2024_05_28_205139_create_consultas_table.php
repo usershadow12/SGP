@@ -14,7 +14,6 @@ return new class extends Migration
     {
         Schema::create('consultas', function (Blueprint $table) {
             $table->id();
-            $table->string('tipo');
             $table->datetime('data_marcacao')
                 ->default(DB::raw('CURRENT_TIMESTAMP()'));
             $table->datetime('data_consulta')

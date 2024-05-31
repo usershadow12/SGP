@@ -17,7 +17,7 @@ class prescricao extends Model
         'duracao',
         'descricao',
         'indicacao_especial',
-        'fk_consulta',
+        'consulta_id',
     ];
-    
+
 }

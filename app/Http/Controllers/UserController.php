@@ -2,9 +2,12 @@
 namespace App\Http\Controllers;
 
 session_start();
-use App\Models\Novouser;
 use App\Models\User;
+use App\Models\Medico;
+use App\Models\Novouser;
+use App\Models\Paciente;
 use Illuminate\Http\Request;
+use App\Models\Especialidade;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -28,8 +31,18 @@ class UserController extends Controller
 
             $dados = User::where('email', $request['email'])->First();
             $_SESSION['user'] = $dados;
-            if($dados['paciente'] === 1)  return redirect()->route('paciente.index');
-            else return redirect()->route('medico.index');
+            if($dados['paciente'] === 1){
+                if(!Paciente::where('user_id', $dados['id'])->First()){
+                  return view('app.paciente.create');
+                }
+                return redirect()->route('consulta.index');
+            }else{
+                if(!Medico::where('user_id', $dados['id'])->First()){
+                    $especialidades = Especialidade::all();
+                    return view('app.medico.create', compact('especialidades'));
+                  }
+                return redirect()->route('consulta.index');
+            }
         }else{
             return redirect()->back()->with('danger', 'email ou Senha Inválida');
             //dd('login falhou');

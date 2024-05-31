@@ -10,6 +10,12 @@ class consulta extends Model
     use HasFactory;
     protected $table = 'consultas';
     protected $fillable = [
-        'tipo', 'custo', 'data_marcacao', 'data-consulta', 'fk_paciente', 'fk_medico'
+        'tipo',
+        'data_marcacao',
+        'data_consulta',
+        'status',
+        'tipoconsulta_id',
+        'paciente_id',
+        'medico_id'
     ];
 }
