@@ -15,7 +15,6 @@ return new class extends Migration
         Schema::create('prescricoes', function (Blueprint $table) {
             $table->id();
             $table->dateTime('data')->default(DB::raw('CURRENT_TIMESTAMP()'));
-            $table->text('medicamento');
             $table->integer('duracao');
             $table->text('descricao');
             $table->text('indicacao_especial');

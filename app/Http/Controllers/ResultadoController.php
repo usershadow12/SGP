@@ -1,29 +1,31 @@
 <?php
 
 namespace App\Http\Controllers;
-session_start();
 
-use App\Models\especialidade;
-use App\Models\Medico;
-use App\Models\medico as ModelsMedico;
+use App\Models\Consulta;
+use App\Models\Resultado;
 use Illuminate\Http\Request;
 
-class MedicoController extends Controller
+class ResultadoController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return redirect()->route('consulta.index');
+        //
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($id)
     {
-        return view('app.medico.create');
+        $consulta = Consulta::find($id);
+        if($consulta->status != 'Aberta'){
+            return redirect()->route('consulta.index');
+        }
+        return view('app.resultado.create',compact('id'));
     }
 
     /**
@@ -31,20 +33,22 @@ class MedicoController extends Controller
      */
     public function store(Request $request)
     {
-        $request['user_id'] = $_SESSION['user']['id'];
-        Medico::create($request->all());
-
+        $filename = rand(0, 999999) . '-' . $request->file('resultado')->getClientOriginalName();
+        $path = $request->file('resultado')->storeAs('uploads', $filename);
+        $data = $request->all();
+        $data['resultado'] = $path;
+        Resultado::create($data);
         return redirect()->route('consulta.index');
     }
+
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        $medico = Medico::findOrFail($id);
-        $especialidades = Especialidade::all();
-        return view('app.medico.show', compact('medico', 'especialidades'));
+        $resultado = Resultado::where('consulta_id', $id)->First();
+        return view('app.resultado.show', compact('resultado'));
     }
 
     /**
@@ -52,9 +56,7 @@ class MedicoController extends Controller
      */
     public function edit(string $id)
     {
-        $medico = Medico::findOrFail($id);
-        $especialidades = Especialidade::all();
-        return view('app.medico.edit', compact('medico', 'especialidades'));
+        //
     }
 
     /**
@@ -62,10 +64,7 @@ class MedicoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $medico = Medico::findOrFail($id);
-        $medico->update($request->all());
-
-        return redirect()->route('consulta.index');
+        //
     }
 
     /**

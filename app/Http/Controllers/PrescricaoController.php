@@ -1,39 +1,40 @@
 <?php
 
 namespace App\Http\Controllers;
-session_start();
 
-use App\Models\especialidade;
-use App\Models\Medico;
-use App\Models\medico as ModelsMedico;
+use App\Models\Consulta;
+use App\Models\prescricao;
 use Illuminate\Http\Request;
 
-class MedicoController extends Controller
+class PrescricaoController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return redirect()->route('consulta.index');
+        //
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($id)
     {
-        return view('app.medico.create');
+        $consulta = Consulta::find($id);
+        if($consulta->status != 'Exame'){
+            return redirect()->route('consulta.index');
+        }
+        return view('app.prescricao.create', compact('id'));
     }
+
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $request['user_id'] = $_SESSION['user']['id'];
-        Medico::create($request->all());
-
+        Prescricao::create($request->all());
         return redirect()->route('consulta.index');
     }
 
@@ -42,9 +43,8 @@ class MedicoController extends Controller
      */
     public function show(string $id)
     {
-        $medico = Medico::findOrFail($id);
-        $especialidades = Especialidade::all();
-        return view('app.medico.show', compact('medico', 'especialidades'));
+        $prescricao = Prescricao::where('consulta_id', $id)->First();
+        return view('app.prescricao.show', compact('prescricao'));
     }
 
     /**
@@ -52,9 +52,8 @@ class MedicoController extends Controller
      */
     public function edit(string $id)
     {
-        $medico = Medico::findOrFail($id);
-        $especialidades = Especialidade::all();
-        return view('app.medico.edit', compact('medico', 'especialidades'));
+        $prescricao = Prescricao::find($id);
+        return view('app.prescricao.edit', compact('prescricao'));
     }
 
     /**
@@ -62,9 +61,8 @@ class MedicoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $medico = Medico::findOrFail($id);
-        $medico->update($request->all());
-
+        $prescricao = Prescricao::findOrFail($id);
+        $prescricao->update($request->only('duracao', 'descricao', 'indicacao_especial'));
         return redirect()->route('consulta.index');
     }
 

@@ -5,6 +5,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MedicoController;
 use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\PacienteController;
+use App\Http\Controllers\HconsultaController;
+use App\Http\Controllers\ResultadoController;
+use App\Http\Controllers\PrescricaoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,26 +20,46 @@ use App\Http\Controllers\PacienteController;
 |
 */
 
-Route::get('/', [UserController::class, 'login'])->name('login');
+Route::get('/back', function(){
+    return redirect()->route('consulta.index');
+})->name('back');
+
+Route::get('/login', [UserController::class, 'login'])->name('login');
+Route::get('/', [UserController::class, 'logout'])->name('login.logout');
 Route::post('/', [UserController::class, 'auth'])->name('auth');
 
 Route::get('/cadastro', [UserController::class, 'create'])->name('cadastro.create');
 Route::post('/cadastro', [UserController::class, 'store'])->name('cadastro.store');
-
+//Rotas Gerais
+Route::middleware(['pacientemedico'])->group(function(){
 Route::get('/consulta', [ConsultaController::class, 'index'])->name('consulta.index');
-Route::get('/consulta/create', [ConsultaController::class, 'create'])->name('consulta.create');
-Route::post('/consulta', [ConsultaController::class, 'store'])->name('consulta.store');
 Route::get('/consulta/{id}/edit', [ConsultaController::class, 'edit'])->name('consulta.edit');
-Route::put('/consulta/{id}', [ConsultaController::class, 'update'])->name('consulta.update');
+Route::put('/consulta/{id}/update', [ConsultaController::class, 'update'])->name('consulta.update');
 Route::delete('/consulta/{id}', [ConsultaController::class, 'destroy'])->name('consulta.destroy');
-Route::get('/consulta/{id}', [ConsultaController::class, 'show'])->name('consulta.show');
+Route::get('/consulta/{id}/show', [ConsultaController::class, 'show'])->name('consulta.show');
+Route::put('/consulta/{id}/', [ConsultaController::class, 'cancelar'])->name('consulta.cancelar');
+//Rotas Resultado
 
-
+Route::post('/resultado', [ResultadoController::class, 'store'])->name('resultado.store');
+Route::get('/resultado', [ResultadoController::class, 'index'])->name('resultado.index');
+Route::get('/resultado/{id}/edit', [ResultadoController::class, 'edit'])->name('resultado.edit');
+Route::put('/resultado/{id}/update', [ResultadoController::class, 'update'])->name('resultado.update');
+Route::delete('/resultado/{id}', [ResultadoController::class, 'destroy'])->name('resultado.destroy');
+Route::get('/resultado/{id}/show', [ResultadoController::class, 'show'])->name('resultado.show');
+Route::put('/resultado/{id}/', [ResultadoController::class, 'cancelar'])->name('resultado.cancelar');
+//Rotas Paciente
+Route::get('/paciente/{id}', [PacienteController::class, 'show'])->name('paciente.show');
+//Rotas Hconsulta
+Route::get('/hconsulta/{id}', [HconsultaController::class, 'show'])->name('hconsulta.show');
+//Rotas Prescrições
+Route::get('/prescricao/{id}', [PrescricaoController::class, 'show'])->name('prescricao.show');
+});
 
 Route::middleware(['paciente'])->group(function(){
-    Route::get('paciente', function(){
-        dd('Paciente');
-        })->name('paciente');
+    Route::get('/consulta/create', [ConsultaController::class, 'create'])->name('consulta.create');
+    Route::post('/consulta', [ConsultaController::class, 'store'])->name('consulta.store');
+    Route::get('/resultado/{id}', [ResultadoController::class, 'create'])->name('resultado.create');
+
     Route::get('/paciente', [PacienteController::class, 'index'])->name('paciente.index');
     Route::get('/paciente/create', [PacienteController::class, 'create'])->name('paciente.create');
     Route::post('/paciente', [PacienteController::class, 'store'])->name('paciente.store');
@@ -44,17 +67,25 @@ Route::middleware(['paciente'])->group(function(){
     Route::put('/paciente/{id}', [PacienteController::class, 'update'])->name('paciente.update');
     Route::delete('/paciente/{id}', [PacienteController::class, 'destroy'])->name('paciente.destroy');
 });
-
+//Rotas Médico
 Route::middleware(['medico'])->group(function(){
-    Route::get('medico', function(){
-        dd('medico');
-    })->name('medico');
     Route::get('/medico', [MedicoController::class, 'index'])->name('medico.index');
-Route::get('/medico/create', [MedicoController::class, 'create'])->name('medico.create');
-Route::post('/medico', [MedicoController::class, 'store'])->name('medico.store');
-Route::get('/medico/{id}/edit', [MedicoController::class, 'edit'])->name('medico.edit');
-Route::put('/medico/{id}', [MedicoController::class, 'update'])->name('medico.update');
-Route::delete('/medico/{id}', [MedicoController::class, 'destroy'])->name('medico.destroy');
-Route::get('/medico/{id}', [MedicoController::class, 'show'])->name('medico.show');
+    Route::get('/medico/create', [MedicoController::class, 'create'])->name('medico.create');
+    Route::post('/medico', [MedicoController::class, 'store'])->name('medico.store');
+    Route::get('/medico/{id}/edit', [MedicoController::class, 'edit'])->name('medico.edit');
+    Route::put('/medico/{id}', [MedicoController::class, 'update'])->name('medico.update');
+    Route::delete('/medico/{id}', [MedicoController::class, 'destroy'])->name('medico.destroy');
+    Route::get('/medico/{id}', [MedicoController::class, 'show'])->name('medico.show');
 
+    //Rotas Hconsulta
+    Route::get('/hconsulta/{id}/create', [HconsultaController::class, 'create'])->name('hconsulta.create');
+    Route::post('/hconsulta', [HconsultaController::class, 'store'])->name('hconsulta.store');
+    Route::get('/hconsulta/{id}/edit', [HconsultaController::class, 'edit'])->name('hconsulta.edit');
+    Route::put('/hconsulta/{id}', [HconsultaController::class, 'update'])->name('hconsulta.update');
+
+    //Rotas Prescricao
+    Route::get('/prescricao/{id}/create', [PrescricaoController::class, 'create'])->name('prescricao.create');
+    Route::post('/prescricao', [PrescricaoController::class, 'store'])->name('prescricao.store');
+    Route::get('/prescricao/{id}/edit', [PrescricaoController::class, 'edit'])->name('prescricao.edit');
+    Route::put('/prescricao/{id}', [PrescricaoController::class, 'update'])->name('prescricao.update');
 });

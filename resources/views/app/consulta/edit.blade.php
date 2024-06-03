@@ -3,27 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Paciente</title>
+    <title>Remarcar Consulta</title>
 </head>
 <body>
-    <form method="POST" action="{{ route('paciente.update', $paciente->id) }}">
-        @csrf
+    <x-alerta/>
+    <form method="POST" action="{{ route('consulta.update', $consulta->id) }}">
         @method('PUT')
-
-        <input type="text" name="bi" value="{{ old('bi', $paciente->bi) }}" placeholder="Bilhete de Identidade" required>
-        <input type="text" name="nome" value="{{ old('nome', $paciente->nome) }}" placeholder="Nome do Paciente" required>
-        <input type="text" name="sobrenome" value="{{ old('sobrenome', $paciente->sobrenome) }}" placeholder="Sobrenome do Paciente" required>
-        <select name="sexo">
-            @foreach (['M' => 'Masculino', 'F' => 'Feminino'] as $key => $sexo)
-            <option value="{{ $key }}" {{ old('sexo', $paciente->sexo) == $key ? 'selected' : ''}}>{{ $sexo }}</option>
+@csrf
+<div>
+    <label for="">Data da Consulta</label>
+    <input type="datetime-local" name="data_consulta" required value="{{ $consulta->data_consulta ?? old('data_consulta') }}" >
+</div>
+<div>
+    <select name="tipoconsulta_id">
+        <optgroup label="Tipo de Consulta">
+            @foreach ($tipos as $tiposs)
+                @foreach ([$tiposs->id => $tiposs->nome] as $key => $tipo)
+                    <option value="{{ $key }}" {{$consulta->tipoconsulta_id == $key ? 'selected' : ''}}>
+                    {{ $tiposs->nome }}</option>
+                @endforeach
             @endforeach
-        </select>
-        <input type="number" name="peso" value="{{ old('peso', $paciente->peso) }}" placeholder="Peso do Paciente" required>
-        <input type="number" name="idade" value="{{ old('idade', $paciente->idade) }}" placeholder="Idade do Paciente" required>
-        <input type="text" name="contacto1" value="{{ old('contacto1', $paciente->contacto1) }}" placeholder="Contacto do paciente" required>
-        <input type="text" name="morada" value="{{ old('morada', $paciente->morada) }}" placeholder="Morada do paciente" required>
+        </optgroup>
+    </select>
+</div>
+<div>
+    <select name="medico_id">
+        <optgroup label="Selecione o Medico">
+            @foreach ($medicos as $medicoss)
+                @foreach ([$medicoss->id => $medicoss->nome] as $key => $nome)
+                <option value="{{ $key }}" {{ $consulta->medico_id == $key ? 'selected' : ''}}>{{ $nome }}</option>
+                @endforeach
+            @endforeach
+        </optgroup>
+    </select>
+</div>
 
-        <input type="submit" value="Editar Paciente">
+        <input type="submit" value="Remarcar Consulta">
     </form>
+
+    <a href="{{ route('back') }}">Voltar</a>
 </body>
 </html>

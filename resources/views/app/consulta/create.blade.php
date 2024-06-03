@@ -3,25 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criar Paciente</title>
+    <title>Marcar Consulta</title>
 </head>
 <body>
-    <form method="POST" action="{{ route('paciente.store') }}">
-        @csrf
+    <x-alerta/>
+    <form method="POST" action="{{ route('consulta.store') }}">
 
-        <input type="text" name="bi" placeholder="Bilhete de Identidade" required>
-        <input type="text" name="nome" placeholder="Nome do Paciente" required>
-        <input type="text" name="sobrenome" placeholder="Sobrenome do Paciente" required>
-        <select name="sexo">
-            <option value="M">Masculino</option>
-            <option value="F">Feminino</option>
-        </select>
-        <input type="number" name="peso" placeholder="Peso do Paciente" required>
-        <input type="number" name="idade" placeholder="Idade do Paciente" required>
-        <input type="text" name="contacto1" placeholder="Contacto do paciente" required>
-        <input type="text" name="morada" placeholder="Morada do paciente" required>
+@csrf
+<div>
+    <label for="">Data da Consulta</label>
+    <input type="datetime-local" name="data_consulta" required>
+</div>
+<div>
+    <select name="tipoconsulta_id">
+        <optgroup label="Tipo de Consulta">
+                @foreach ($tipos as $tipo)
+                    <option value="{{ $tipo->id }}">{{ $tipo->nome }}</option>
+                @endforeach
+        </optgroup>
+    </select>
+</div>
+<div>
+    <select name="medico_id">
+        <optgroup label="Selecione o médico">
+                @foreach ($medicos as $medico)
+                    <option value="{{ $medico->id }}">{{ $medico->nome }}</option>
+                @endforeach
+        </optgroup>
+    </select>
+</div>
 
-        <input type="submit" value="Cadastrar Paciente">
+        <input type="submit" value="Marcar Consulta">
     </form>
+    <a href="{{ route('back') }}">Voltar</a>
 </body>
 </html>

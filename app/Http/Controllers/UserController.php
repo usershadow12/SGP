@@ -64,5 +64,11 @@ class UserController extends Controller
         Novouser::create($request->all());
         return redirect()->route('login')->with('danger', 'Aguarde 1h pela aprovação da sua conta');
     }
+    public function logout(Request $request){
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return view('app.login');
+    }
 
 }

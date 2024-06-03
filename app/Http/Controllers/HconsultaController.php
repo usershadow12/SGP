@@ -1,29 +1,31 @@
 <?php
 
 namespace App\Http\Controllers;
-session_start();
 
-use App\Models\especialidade;
-use App\Models\Medico;
-use App\Models\medico as ModelsMedico;
+use App\Models\Consulta;
+use App\Models\hconsulta;
 use Illuminate\Http\Request;
 
-class MedicoController extends Controller
+class HconsultaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return redirect()->route('consulta.index');
+        //
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($id)
     {
-        return view('app.medico.create');
+        $consulta = Consulta::find($id);
+        if($consulta->status != 'Marcada'){
+            return redirect()->route('consulta.index');
+        }
+        return view('app.hconsulta.create', compact('id'));
     }
 
     /**
@@ -31,9 +33,7 @@ class MedicoController extends Controller
      */
     public function store(Request $request)
     {
-        $request['user_id'] = $_SESSION['user']['id'];
-        Medico::create($request->all());
-
+        hconsulta::create($request->all());
         return redirect()->route('consulta.index');
     }
 
@@ -42,9 +42,8 @@ class MedicoController extends Controller
      */
     public function show(string $id)
     {
-        $medico = Medico::findOrFail($id);
-        $especialidades = Especialidade::all();
-        return view('app.medico.show', compact('medico', 'especialidades'));
+        $hconsulta = Hconsulta::where('consulta_id', $id)->First();
+        return view('app.hconsulta.show', compact('hconsulta'));
     }
 
     /**
@@ -52,9 +51,8 @@ class MedicoController extends Controller
      */
     public function edit(string $id)
     {
-        $medico = Medico::findOrFail($id);
-        $especialidades = Especialidade::all();
-        return view('app.medico.edit', compact('medico', 'especialidades'));
+        $hconsulta = Hconsulta::find($id);
+        return view('app.hconsulta.edit', compact('hconsulta'));
     }
 
     /**
@@ -62,10 +60,10 @@ class MedicoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $medico = Medico::findOrFail($id);
-        $medico->update($request->all());
+        $hconsulta = Hconsulta::findOrFail($id);
+        $hconsulta->update($request->only('diagnostico', 'exame', 'observacoes'));
+        return view('app.hconsulta.show', compact('hconsulta'));
 
-        return redirect()->route('consulta.index');
     }
 
     /**

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->datetime('data_consulta')
                 ->default(DB::raw('CURRENT_TIMESTAMP()'));
             $table->timestamps();
-            $table->enum('status', ['Marcada', 'Cancelada', 'Aberta', 'Feita']);
+            $table->enum('status', ['Marcada', 'Cancelada','Exame', 'Aberta', 'Feita'])->default('Marcada');
             $table->foreignId('tipoconsulta_id')
             ->constrained()
             ->cascadeOnDelete()

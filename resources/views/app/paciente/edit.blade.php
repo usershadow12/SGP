@@ -25,5 +25,7 @@
 
         <input type="submit" value="Editar Paciente">
     </form>
+
+    <a href="{{ route('back') }}">Voltar</a>
 </body>
 </html>

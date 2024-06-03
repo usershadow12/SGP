@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 session_start();
@@ -18,8 +17,7 @@ class PacienteController extends Controller
     }
     public function index()
     {
-        $pacientes = Paciente::all();
-        return view('app.paciente.index', compact('pacientes'));
+        return redirect()->route('consulta.index');
     }
 
     public function create()
@@ -35,6 +33,11 @@ class PacienteController extends Controller
         return redirect()->route('paciente.index');
     }
 
+    public function show($id){
+        $paciente = Paciente::findOrFail($id);
+        return view('app.paciente.show', compact('paciente'));
+    }
+
     public function edit($id)
     {
         $paciente = Paciente::findOrFail($id);
@@ -46,7 +49,7 @@ class PacienteController extends Controller
         $paciente = Paciente::findOrFail($id);
         $paciente->update($request->all());
 
-        return redirect()->route('paciente.index');
+        return redirect()->route('consulta.index');
     }
 
     public function destroy($id)

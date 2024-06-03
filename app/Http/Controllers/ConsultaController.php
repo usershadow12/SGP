@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Medico;
 use App\Models\Consulta;
 use App\Models\Paciente;
+use App\Models\Tipoconsulta;
 use Illuminate\Http\Request;
 session_start();
 class ConsultaController extends Controller
@@ -12,6 +13,14 @@ class ConsultaController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function paciente(){
+        $user_id = $_SESSION['user']['id'];
+        return Paciente::where('user_id', $user_id)->First();
+    }
+    public function medico(){
+        $user_id = $_SESSION['user']['id'];
+        return Medico::where('user_id', $user_id)->First();
+    }
     public function verific(){
         if($_SESSION['user']['paciente'] === 1){
             return 0;
@@ -22,17 +31,14 @@ class ConsultaController extends Controller
     public function index()
     {
         if($this->verific() === 0){
-            $user_id = $_SESSION['user']['id'];
-            $paciente = Paciente::where('user_id', $user_id)->First();
+            $paciente = $this->paciente();
             $consultas = Consulta::where(function($query) use($paciente){
                 $query->where('paciente_id', $paciente->id);
             })->get();
-            return view('app.paciente.index', compact('consultas'));
+            return view('app.paciente.index', compact('consultas', 'paciente'));
         }
         else{
-            $user_id = $_SESSION['user']['id'];
-            $medico = Medico::where('user_id', $user_id)->First();
-
+            $medico = $this->medico();
             $consultas = Consulta::where(function($query) use($medico){
                 $query->where('medico_id', $medico->id);
             })->get();
@@ -45,7 +51,9 @@ class ConsultaController extends Controller
      */
     public function create()
     {
-        dd('feito');
+        $tipos = Tipoconsulta::all();
+        $medicos = Medico::all();
+        return view('app.consulta.create', compact('tipos', 'medicos'));
     }
 
     /**
@@ -53,15 +61,22 @@ class ConsultaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $paciente =  $this->paciente();
+        $request['paciente_id'] = $paciente->id;
+        Consulta::create($request->all());
+        return redirect()->route('consulta.index');
     }
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
-    {
-        dd($id);
+    {   $consulta = Consulta::findOrFail($id);
+        $medico = Medico::find($consulta->medico_id);
+        $tipo = Tipoconsulta::find($consulta->tipoconsulta_id);
+        $consulta->medico = $medico->nome;
+        $consulta->tipo = $tipo->nome;
+        return view('app.consulta.show', compact('consulta'));
     }
 
     /**
@@ -69,8 +84,10 @@ class ConsultaController extends Controller
      */
     public function edit(string $id)
     {
-
-        dd('feito');
+        $tipos= Tipoconsulta::all();
+        $medicos = Medico::all();
+        $consulta = Consulta::findOrFail($id);
+        return view('app.consulta.edit', compact('consulta', 'tipos', 'medicos'));
     }
 
     /**
@@ -78,15 +95,22 @@ class ConsultaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $consulta = Consulta::findOrFail($id);
+        $request['status'] = 'Marcada';
+        $consulta->update($request->all());
+        return redirect()->route('consulta.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
+    public function cancelar(Request $request, $id)
+    {
+        $consulta = Consulta::findOrFail($id);
+        $consulta->update($request->only(['status']));
+        return redirect()->route('consulta.index');
+    }
     public function destroy(string $id)
     {
-
-        dd('feito');
     }
 }
