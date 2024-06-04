@@ -6,6 +6,12 @@
     <title>Criar Paciente</title>
 </head>
 <body>
+    <x-alerta/>
+    @if (session('warning'))
+        <div>
+            {{ session('warning') }}
+        </div>
+    @endif
     <form method="POST" action="{{ route('paciente.store') }}">
         @csrf
 

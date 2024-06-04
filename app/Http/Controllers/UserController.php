@@ -19,13 +19,13 @@ class UserController extends Controller
     public function auth(Request $request){
         //dd($request->only(['name', 'password']));
 
-        /*$this->validate($request, [
-            'name' => 'required',
+        $this->validate($request, [
+            'email' => 'required',
             'password' => 'required'
         ],[
-            'name.required' => 'Username é obrigatório',
+            'email.required' => 'Email é obrigatório',
             'password.required' => 'Password é obrigatório'
-        ]);*/
+        ]);
 
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
 
@@ -44,7 +44,7 @@ class UserController extends Controller
                 return redirect()->route('consulta.index');
             }
         }else{
-            return redirect()->back()->with('danger', 'email ou Senha Inválida');
+            return redirect()->route('login')->with('danger', 'email ou Senha Inválida');
             //dd('login falhou');
         }
     }
@@ -54,15 +54,26 @@ class UserController extends Controller
     }
 
     public function store(Request $request){
-        if($request['tipo'] === 'paciente'){
-            $request['paciente'] = 1;
-            $request['medico'] = 0;
-        }else{
-            $request['paciente'] = 0;
-            $request['medico'] = 1;
+        if(!User::where('email', $request['email'])->First()){
+            if($request['tipo'] === 'paciente'){
+                $request['paciente'] = 1;
+                $request['medico'] = 0;
+            }else{
+                $request['paciente'] = 0;
+                $request['medico'] = 1;
+            }
+            User::create($request->all());
+            return redirect()->route('login');
+        /* if($user = User::where('email', $request->email)->First()){
+                if($user->paciente === 1){
+                    return view('app.paciente.create');
+                }else{
+                    $especialidades = Especialidade::all();
+                    return view('app.medico.create', compact('especialidades'));
+                }
+            }*/
         }
-        Novouser::create($request->all());
-        return redirect()->route('login')->with('danger', 'Aguarde 1h pela aprovação da sua conta');
+        return redirect()->route('cadastro.create')->with('warning', 'Este Email Já foi usado');
     }
     public function logout(Request $request){
         Auth::logout();

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('hpacientes', function (Blueprint $table) {
             $table->id();
-            $table->string('antecendente')->nullable();
+            $table->string('antecedente')->nullable();
             $table->string('historico_familiar')->nullable();
             $table->string('alergia')->nullable();
             $table->foreignId('paciente_id')

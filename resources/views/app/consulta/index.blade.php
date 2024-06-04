@@ -6,7 +6,7 @@
     <title>Pacientes</title>
 </head>
 <body>
-    <a href="{{ route('consulta.create') }}">Marcar Consulta</a>
+    <a name="marcar" href="{{ route('consulta.create') }}">Marcar Consulta</a>
     <a href="{{ route('consulta.show', $consulta) }}">Consulta Aberta</a>
     <a href="{{ route('consultashow', $consulta) }}">Consulta Cancelada</a>
     <a href="{{ route('consultashow', $consulta) }}">Consulta Fechada</a>
@@ -43,9 +43,5 @@
             @endforelse
         </tbody>
     </table>
-
-    <script>
-
-    </script>
 </body>
 </html>

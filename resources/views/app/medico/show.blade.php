@@ -34,6 +34,7 @@
 
     </form>
     <a href="{{ route('medico.edit', $medico->id) }}">editar</a>
+    <a href="{{ route('horario.show', $medico->id) }}">ver horário</a>
 
     <a href="{{ route('back') }}">Voltar</a>
 </body>

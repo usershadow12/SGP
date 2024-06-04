@@ -24,6 +24,7 @@
         <input type="text" name="morada" value="{{ $paciente->morada}}" placeholder="Morada do paciente" disabled>
     </form>
     <a href="{{ route('paciente.edit', $paciente) }}">Editar dados</a>
+    <a href="{{ route('hpaciente.show', $paciente->id) }}">Ver Hisórico</a>
 
     <a href="{{ route('back') }}">Voltar</a>
 </body>

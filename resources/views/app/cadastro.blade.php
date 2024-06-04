@@ -6,19 +6,25 @@
     <title>Cadastro</title>
 </head>
 <body>
+    <x-alerta/>
+    @if (session('warning'))
+        <div>
+            {{ session('warning') }}
+        </div>
+    @endif
     <form method="POST" action="{{ route('cadastro.store') }}">
         @csrf
         <div>
             <label for="">Username</label>
-            <input type="text" name="name">
+            <input type="text" name="name" required>
         </div>
         <div>
             <label for="">E-mail</label>
-            <input type="email" name="email">
+            <input type="email" name="email" required>
         </div>
         <div>
             <label for="">Password</label>
-            <input type="password" name="password">
+            <input type="password" name="password" required>
         </div>
         <div>
             <select name="tipo" id="">

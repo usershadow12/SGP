@@ -42,7 +42,7 @@ class ConsultaController extends Controller
             $consultas = Consulta::where(function($query) use($medico){
                 $query->where('medico_id', $medico->id);
             })->get();
-            return view('app.medico.index', compact('consultas'));
+            return view('app.medico.index', compact('consultas', 'medico'));
         }
     }
 

@@ -6,7 +6,7 @@
     <title>Pacientes</title>
 </head>
 <body>
-    <a href="{{ route('consulta.create') }}">Marcar Consulta</a>
+    <a name="ok" id="ok" href="{{ route('consulta.create') }}">Marcar Consulta</a>
     <a href="{{ route('paciente.show', $paciente->id) }}">Perfil</a>
     <a href="{{ route('login.logout', $paciente->id) }}">Sair</a>
     <table>
@@ -40,9 +40,18 @@
             @endforelse
         </tbody>
     </table>
-
+    <!--<script src="jquery.form.js"></script>-->
     <script>
-
+        @include('app.paciente.jquery')
     </script>
+    <script>
+    $(function() {
+        $('a[name="ok"]').(function(event){
+            event.preventDefault();
+            alert('Teste mais uma vez');  
+        })
+    })
+</script>
+
 </body>
 </html>

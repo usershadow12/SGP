@@ -6,8 +6,9 @@
     <title>Pacientes</title>
 </head>
 <body>
-    <a href="{{ route('medico.show', $consultas[0]->medico_id) }}">Perfil</a>
-    <a href="{{ route('login.logout', $consultas[0]->medico_id) }}">Sair</a>
+    <a href="{{ route('medico.show', $medico->id) }}">Perfil</a>
+    <a href="{{ route('login.logout', $medico->id) }}">Sair</a>
+    <a href="{{ route('medico.gerarpdf') }}">Gerar Pdf</a>
     <table>
         <thead>
             <tr>

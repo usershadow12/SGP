@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 session_start();
 
-use App\Models\especialidade;
+use App\Models\User;
+use App\Models\Ordem;
 use App\Models\Medico;
-use App\Models\medico as ModelsMedico;
+use App\Models\Consulta;
+use Termwind\Components\Dd;
 use Illuminate\Http\Request;
+use App\Models\especialidade;
+use App\Models\medico as ModelsMedico;
 
 class MedicoController extends Controller
 {
@@ -31,10 +35,20 @@ class MedicoController extends Controller
      */
     public function store(Request $request)
     {
+        if(!Medico::where('bi', $request['bi'])->First() AND
+        !Medico::where('contacto1', $request['contacto1'])->First() AND
+        !Medico::where('contacto2', $request['contacto2'])->First() AND
+        !Medico::where('ordem', $request['ordem'])->First()){
         $request['user_id'] = $_SESSION['user']['id'];
-        Medico::create($request->all());
-
-        return redirect()->route('consulta.index');
+        $id = $_SESSION['user']['id'];
+        if(Ordem::where('ordem', $request->ordem)->First()){
+            Medico::create($request->all());
+            return redirect()->route('horario.create');
+        }
+        User::findOrFail($id)->delete($id);
+        return redirect()->route('login')->with('danger', 'A Sua Conta Foi Removida, Porque o número de ordem não é válido');
+        }
+        return redirect()->route('medico.create')->with('warning', 'O BI, o número de ordem e os contactos não podem ser repetidos');
     }
 
     /**
@@ -74,5 +88,12 @@ class MedicoController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function gerarpdf(){
+        $id = $_SESSION['user']['id'];
+        $medico = Medico::where('user_id', $id)->First();
+        $consultas = Consulta::where('medico_id', $medico->id);
+        dd($consultas);
     }
 }

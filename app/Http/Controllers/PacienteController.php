@@ -27,10 +27,14 @@ class PacienteController extends Controller
 
     public function store(Request $request)
     {
-        $request['user_id'] = $_SESSION['user']['id'];
-        Paciente::create($request->all());
-
-        return redirect()->route('paciente.index');
+        if(!Paciente::where('bi', $request['bi'])->First() AND
+        !Paciente::where('contacto1', $request['contacto1'])->First() AND
+        !Paciente::where('contacto2', $request['contacto2'])->First()){
+            $request['user_id'] = $_SESSION['user']['id'];
+            Paciente::create($request->all());
+            return redirect()->route('hpaciente.create');
+        }
+        return redirect()->route('paciente.create')->with('warning', 'O BI, e os contactos não podem ser repetidos');
     }
 
     public function show($id){
