@@ -22,9 +22,6 @@ class ResultadoController extends Controller
     public function create($id)
     {
         $consulta = Consulta::find($id);
-        if($consulta->status != 'Aberta'){
-            return redirect()->route('consulta.index');
-        }
         return view('app.resultado.create',compact('id'));
     }
 

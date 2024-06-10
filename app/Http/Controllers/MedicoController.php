@@ -11,6 +11,10 @@ use Termwind\Components\Dd;
 use Illuminate\Http\Request;
 use App\Models\especialidade;
 use App\Models\medico as ModelsMedico;
+use App\Models\paciente;
+use App\Models\Tipoconsulta;
+use Barryvdh\DomPDF\Facade\PDF;
+use Illuminate\Support\Facades\DB;
 
 class MedicoController extends Controller
 {
@@ -57,8 +61,8 @@ class MedicoController extends Controller
     public function show(string $id)
     {
         $medico = Medico::findOrFail($id);
-        $especialidades = Especialidade::all();
-        return view('app.medico.show', compact('medico', 'especialidades'));
+        $tipos = Tipoconsulta::all();
+        return view('app.medico.show', compact('medico', 'tipos'));
     }
 
     /**
@@ -67,8 +71,8 @@ class MedicoController extends Controller
     public function edit(string $id)
     {
         $medico = Medico::findOrFail($id);
-        $especialidades = Especialidade::all();
-        return view('app.medico.edit', compact('medico', 'especialidades'));
+        $tipos = Tipoconsulta::all();
+        return view('app.medico.edit', compact('medico', 'tipos'));
     }
 
     /**
@@ -94,6 +98,12 @@ class MedicoController extends Controller
         $id = $_SESSION['user']['id'];
         $medico = Medico::where('user_id', $id)->First();
         $consultas = Consulta::where('medico_id', $medico->id);
-        dd($consultas);
+        $consultas = DB::table('consultas')
+            ->join('pacientes', 'consultas.paciente_id', 'pacientes.id')
+            ->select('*')
+            ->get();
+        /*Como fazer join com ORM*/
+        $pdf = PDF::loadView('app.medico.gerar-pdf', ['consultas' => $consultas])->setPaper('a4', 'portrait');
+        return $pdf->download('listar_consultas.pdf');
     }
 }

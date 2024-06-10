@@ -6,8 +6,8 @@ use App\Models\User;
 use App\Models\Medico;
 use App\Models\Novouser;
 use App\Models\Paciente;
+use App\Models\Tipoconsulta;
 use Illuminate\Http\Request;
-use App\Models\Especialidade;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -38,8 +38,8 @@ class UserController extends Controller
                 return redirect()->route('consulta.index');
             }else{
                 if(!Medico::where('user_id', $dados['id'])->First()){
-                    $especialidades = Especialidade::all();
-                    return view('app.medico.create', compact('especialidades'));
+                    $tipos = Tipoconsulta::all();
+                    return view('app.medico.create', compact('tipos'));
                   }
                 return redirect()->route('consulta.index');
             }

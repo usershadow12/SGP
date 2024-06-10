@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Consulta;
-use App\Models\prescricao;
+use App\Models\Comprovativo;
 use Illuminate\Http\Request;
 
-class PrescricaoController extends Controller
+class ComprovativoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,16 +22,19 @@ class PrescricaoController extends Controller
     public function create($id)
     {
         $consulta = Consulta::find($id);
-        return view('app.prescricao.create', compact('id'));
+        return view('app.comprovativo.create',compact('id'));
     }
-
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        Prescricao::create($request->all());
+        $filename = rand(0, 999999) . '-' . $request->file('comprovativo')->getClientOriginalName();
+        $path = $request->file('comprovativo')->storeAs('uploads', $filename);
+        $data = $request->all();
+        $data['comprovativo'] = $path;
+        Comprovativo::create($data);
         return redirect()->route('consulta.index');
     }
 
@@ -40,33 +43,30 @@ class PrescricaoController extends Controller
      */
     public function show(string $id)
     {
-        $prescricao = Prescricao::where('consulta_id', $id)->First();
-        return view('app.prescricao.show', compact('prescricao'));
+        $comprovativo = Comprovativo::where('consulta_id', $id)->First();
+        return view('app.comprovativo.show', compact('comprovativo'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Comprovativo $comprovativo)
     {
-        $prescricao = Prescricao::find($id);
-        return view('app.prescricao.edit', compact('prescricao'));
+        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Comprovativo $comprovativo)
     {
-        $prescricao = Prescricao::findOrFail($id);
-        $prescricao->update($request->only('duracao', 'descricao', 'indicacao_especial'));
-        return redirect()->route('consulta.index');
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Comprovativo $comprovativo)
     {
         //
     }

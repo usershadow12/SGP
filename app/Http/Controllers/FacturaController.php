@@ -34,9 +34,10 @@ class FacturaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Factura $factura)
+    public function show($id)
     {
-        //
+        $factura = Factura::where('consulta_id', $id)->First();
+        return view('app.factura.show', compact('factura'));
     }
 
     /**

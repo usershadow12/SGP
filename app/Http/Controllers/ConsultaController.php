@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Medico;
 use App\Models\Consulta;
 use App\Models\Paciente;
+use Illuminate\Support\Str;
 use App\Models\Tipoconsulta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Date;
+use Illuminate\Support\Facades\DB;
+
 session_start();
 class ConsultaController extends Controller
 {
@@ -32,15 +36,17 @@ class ConsultaController extends Controller
     {
         if($this->verific() === 0){
             $paciente = $this->paciente();
-            $consultas = Consulta::where(function($query) use($paciente){
-                $query->where('paciente_id', $paciente->id);
+            $filter['paciente'] = $paciente->id;
+            $consultas = Consulta::where(function($query) use($filter){
+                $query->where('paciente_id', $filter['paciente']);
             })->get();
             return view('app.paciente.index', compact('consultas', 'paciente'));
         }
         else{
             $medico = $this->medico();
-            $consultas = Consulta::where(function($query) use($medico){
-                $query->where('medico_id', $medico->id);
+            $filter['medico'] = $medico->id;
+            $consultas = Consulta::where(function($query) use($filter){
+                $query->where('medico_id', $filter['medico']);
             })->get();
             return view('app.medico.index', compact('consultas', 'medico'));
         }
@@ -112,5 +118,64 @@ class ConsultaController extends Controller
     }
     public function destroy(string $id)
     {
+    }
+
+    public function buscar(Request $filter)
+    {
+        $medico = $this->medico();
+        $filter['medico'] = $medico->id;
+        $consultas = DB::table('consultas')
+        ->join('pacientes', 'consultas.paciente_id', '=', 'pacientes.id')
+        ->select('*')->where(function($query) use($filter) {
+
+            $query->where('medico_id', $filter['medico']);
+
+            if($filter['status']) {
+                $query->where('status', $filter['status']);
+            }
+
+            if($filter['inicio'] and $filter['fim']) {
+                $query->whereBetween('data_consulta', [$filter['inicio'], $filter['fim']]);
+            }
+
+            if($filter['nome']){
+                $query->where(function($query) use ($filter) {
+                    $query->where('pacientes.nome', 'like', '%'.$filter['nome'].'%')
+                          ->orWhere('pacientes.sobrenome', 'like', '%'.$filter['nome'].'%');
+                });
+            }
+
+        })->get();
+        return view('app.medico.index', compact('consultas', 'medico'));
+    }
+
+
+    public function buscar1(Request $filter)
+    {
+        $paciente = $this->paciente();
+        $filter['paciente'] = $paciente->id;
+        $consultas = DB::table('consultas')
+        ->join('medicos', 'consultas.medico_id', '=', 'medicos.id')
+        ->select('*')->where(function($query) use($filter) {
+
+            $query->where('paciente_id', $filter['paciente']);
+
+            if($filter['status']) {
+                $query->where('status', $filter['status']);
+            }
+
+            if($filter['inicio'] and $filter['fim']) {
+                $query->whereBetween('data_consulta', [$filter['inicio'], $filter['fim']]);
+            }
+
+            if($filter['nome']){
+                $query->where(function($query) use ($filter) {
+                    $query->where('medicos.nome', 'like', '%'.$filter['nome'].'%')
+                          ->orWhere('medicos.sobrenome', 'like', '%'.$filter['nome'].'%');
+                });
+            }
+
+        })->get();
+        return view('app.paciente.index', compact('consultas', 'paciente'));
     }
 }

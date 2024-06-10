@@ -16,10 +16,10 @@ return new class extends Migration
             $table->id();
             $table->datetime('data_marcacao')
                 ->default(DB::raw('CURRENT_TIMESTAMP()'));
-            $table->datetime('data_consulta')
-                ->default(DB::raw('CURRENT_TIMESTAMP()'));
+            $table->date('data_consulta');
+            $table->time('hora_consulta');
             $table->timestamps();
-            $table->enum('status', ['Marcada', 'Cancelada','Exame', 'Aberta', 'Feita'])->default('Marcada');
+            $table->enum('status', ['Marcada', 'Cancelada','Exame', 'Aberta', 'Feito', 'Concluida'])->default('Marcada');
             $table->foreignId('tipoconsulta_id')
             ->constrained()
             ->cascadeOnDelete()

@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('especialidades', function (Blueprint $table) {
+        Schema::create('comprovativos', function (Blueprint $table) {
             $table->id();
-            $table->string('nome')->unique();
-            $table->float('salario');
+            $table->string('comprovativo');
+            $table->foreignId('consulta_id')
+            ->constrained()
+            ->cascadeOnDelete()
+            ->cascadeOnUpdate();
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('especialidades');
+        Schema::dropIfExists('comprovativos');
     }
 };

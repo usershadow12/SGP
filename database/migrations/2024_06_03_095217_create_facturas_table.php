@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -13,9 +14,10 @@ return new class extends Migration
     {
         Schema::create('facturas', function (Blueprint $table) {
             $table->id();
-            $table->datetime('data');
-            $table->float('preco');
+            $table->dateTime('data')->default(DB::raw('CURRENT_TIMESTAMP()'));
+            $table->float('total');
             $table->string('iban');
+            $table->enum('status', ['Aberta', 'Paga'])->default('Aberta');
             $table->foreignId('consulta_id')
             ->constrained()
             ->cascadeOnDelete()

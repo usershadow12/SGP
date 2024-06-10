@@ -19,7 +19,7 @@ class medico extends Model
         'contacto1',
         'contacto2',
         'morada',
-        'especialidade_id',
+        'tipoconsulta_id',
         'user_id'
     ];
 }

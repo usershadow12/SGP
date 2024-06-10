@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 session_start();
 
+use App\Models\Consulta;
 use App\Models\Paciente;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\PDF;
+use Illuminate\Support\Facades\DB;
+
 class PacienteController extends Controller
 {
     public function verific(){
@@ -59,6 +63,19 @@ class PacienteController extends Controller
     public function destroy($id)
     {
         dd($id);
+    }
+
+    public function gerarpdf(){
+        $id = $_SESSION['user']['id'];
+        $paciente = Paciente::where('user_id', $id)->First();
+        $consultas = Consulta::where('paciente_id', $paciente->id);
+        $consultas = DB::table('consultas')
+            ->join('medicos', 'consultas.medico_id', 'medicos.id')
+            ->select('*')
+            ->get();
+        /*Como fazer join com ORM*/
+        $pdf = PDF::loadView('app.paciente.gerar-pdf', ['consultas' => $consultas])->setPaper('a4', 'portrait');
+        return $pdf->download('listar_consultas.pdf');
     }
 
 }

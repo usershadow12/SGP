@@ -15,9 +15,9 @@
             <option value="M">Masculino</option>
             <option value="F">Feminino</option>
         </select>
-        <select name="especialidade_id">
-            @foreach ($especialidades as $especialidade)
-            <option value="{{ $especialidade->id }}">{{ $especialidade->nome }}</option>
+        <select name="tipoconsulta_id">
+            @foreach ($tipos as $tipo)
+            <option value="{{ $tipo->id }}">{{ $tipo->especialista }}</option>
             @endforeach
         </select>
         <input type="number" name="ordem" placeholder="Nº de Ordem" required>

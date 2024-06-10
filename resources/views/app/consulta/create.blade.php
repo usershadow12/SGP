@@ -10,19 +10,12 @@
     <form method="POST" action="{{ route('consulta.store') }}">
 
 @csrf
+<!--
 <div>
     <label for="">Data da Consulta</label>
     <input type="datetime-local" name="data_consulta" required>
 </div>
-<div>
-    <select name="tipoconsulta_id">
-        <optgroup label="Tipo de Consulta">
-                @foreach ($tipos as $tipo)
-                    <option value="{{ $tipo->id }}">{{ $tipo->nome }}</option>
-                @endforeach
-        </optgroup>
-    </select>
-</div>
+
 <div>
     <select name="medico_id">
         <optgroup label="Selecione o médico">
@@ -33,6 +26,16 @@
     </select>
 </div>
 
+-->
+<div>
+    <select name="tipoconsulta_id">
+        <optgroup label="Tipo de Consulta">
+                @foreach ($tipos as $tipo)
+                    <option value="{{ $tipo->id }}">{{ $tipo->nome }}</option>
+                @endforeach
+        </optgroup>
+    </select>
+</div>
         <input type="submit" value="Marcar Consulta">
     </form>
     <a href="{{ route('back') }}">Voltar</a>

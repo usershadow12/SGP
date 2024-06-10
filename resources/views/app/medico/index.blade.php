@@ -3,12 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pacientes</title>
+    <title>Medico</title>
 </head>
 <body>
     <a href="{{ route('medico.show', $medico->id) }}">Perfil</a>
     <a href="{{ route('login.logout', $medico->id) }}">Sair</a>
     <a href="{{ route('medico.gerarpdf') }}">Gerar Pdf</a>
+    <form action="{{ route('consulta.buscar') }}" method="POST">
+        @csrf
+        <label>Nome Paciente</label>
+        <input type="text" name="nome">
+        <label for="">Estado da Consulta</label>
+            <select name="status" id="">
+                <option value=""></option>
+                <option value="Marcada">Marcada</option>
+                <option value="Aberta">Aberta</option>
+                <option value="Exame">Exame</option>
+                <option value="Feito">Feito</option>
+                <option value="Concluida">Concluida</option>
+                <option value="Cancelada">Cancelada</option>
+            </select>
+        <fieldset>
+            <label for="">De</label>
+            <input type="date" name="inicio">
+            <label for="">Até</label>
+            <input type="date" name="fim">
+        </fieldset>
+        <input type="submit"  value="Pesquisar">
+    </form>
     <table>
         <thead>
             <tr>
@@ -28,10 +50,10 @@
                 <td>{{ $consulta->status }}</td>
                 <td><a href="{{ route('consulta.show', $consulta->id) }}">ver mais</a></td>
                 <td><a href="{{ route('paciente.show', $consulta->paciente_id) }}">ver mais</a></td>
-                @if ($consulta->status === 'Exame')
+                @if ($consulta->status === 'Feito')
                 <td><a href="{{ route('prescricao.create', $consulta->id) }}">presc</a></td>
                 @endif
-                @if ($consulta->status === 'Marcada')
+                @if ($consulta->status === 'Aberta')
                 <td><a href="{{ route('hconsulta.create', $consulta->id) }}">Hist</a></td>
                 @endif
                 @if ($consulta->status === 'Cancelada')
@@ -40,15 +62,10 @@
             </tr>
             @empty
             <tr>
-                <td>Não consulta marcada com você ainda.</td>
+                <td>Nenhum Registro Encontrado.</td>
             </tr>
             @endforelse
         </tbody>
     </table>
-    </table>
-
-    <script>
-
-    </script>
 </body>
 </html>

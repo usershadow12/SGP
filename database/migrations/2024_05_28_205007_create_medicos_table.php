@@ -22,12 +22,13 @@ return new class extends Migration
             $table->string('contacto1')->unique();
             $table->string('contacto2')->nullable()->unique();
             $table->string('morada');
+            $table->integer('totconsulta')->default('0');
             $table->timestamps();
             $table->foreignId('user_id')
             ->constrained()
             ->cascadeOnDelete()
             ->cascadeOnUpdate();
-            $table->foreignId('especialidade_id')
+            $table->foreignId('tipoconsulta_id')
             ->constrained()
             ->cascadeOnDelete()
             ->cascadeOnUpdate();

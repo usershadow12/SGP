@@ -16,11 +16,11 @@
             @endforeach
         </select>
         <div>
-            <select name="especialidade_id" disabled>
+            <select name="tipoconsulta_id" disabled>
                 <optgroup label="Especialidade">
-                    @foreach ($especialidades as $esp)
-                        @foreach ([$esp->id => $esp->nome] as $key => $tipo)
-                        <option value="{{ $key }}" {{ old('especialidade_id', $medico->especialidade_id) == $key ? 'selected' : ''}}>{{ $esp->nome }}</option>
+                    @foreach ($tipos as $tipo)
+                        @foreach ([$tipo->id => $tipo->especialista] as $key => $tipo)
+                        <option value="{{ $key }}" {{ old('tipoconsulta_id', $medico->tipoconsulta_id) == $key ? 'selected' : ''}}>{{ $tipo }}</option>
                         @endforeach
                     @endforeach
                 </optgroup>

@@ -22,9 +22,6 @@ class HconsultaController extends Controller
     public function create($id)
     {
         $consulta = Consulta::find($id);
-        if($consulta->status != 'Marcada'){
-            return redirect()->route('consulta.index');
-        }
         return view('app.hconsulta.create', compact('id'));
     }
 
